@@ -1,9 +1,6 @@
 # Arch Bootstrap Script
 
-**THIS PROJECT IS NOT DONE YET**
-
-My personal scripts for bootstraping a archlinux system.  
-Not designed to be very flexible.
+My personal scripts for bootstrapping an archlinux system.  
 
 # Usage
 1. Boot a computer with arch live image.
