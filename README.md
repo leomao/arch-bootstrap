@@ -8,10 +8,11 @@ Not designed to be very flexible.
 # Usage
 1. Boot a computer with arch live image.
 2. Prepare the partitions for installing the system.
-3. Make sure the network is usable.
+3. Make sure the internet is available.
 4. run the following command:
-```sh
-$ curl https://raw.githubusercontent.com/leomao/arch_bootstrap/master/bootstrap.sh -o bootstrap.sh
+```console
+$ curl https://raw.githubusercontent.com/leomao/arch-bootstrap/master/bootstrap.sh -o bootstrap.sh
 $ vim bootstrap.sh # set the variables to what you need.
-$ sh bootstrap.sh
+$ vim chroot.sh # set the variables to what you need.
+$ bash bootstrap.sh
 ```
