@@ -4,6 +4,7 @@ export HOSTNAME=host
 export USER=server
 export PASS=password
 export TIMEZONE=Asia/Taipei
+export ROOT_PART=/dev/sda3
 
 # 語系
 sed -i -e 's/^#\(en_US\|zh_TW\)\(\.UTF-8\)/\1\2/g' /etc/locale.gen
@@ -41,7 +42,7 @@ initrd	/initramfs-linux.img
 options root=PARTUUID=<PARTUUID> rw
 EOF
 # assume root partition is /dev/sdxY
-export PARTUUID=$(blkid -s PARTUUID -o value /dev/sdxY)
+export PARTUUID=$(blkid -s PARTUUID -o value ${ROOT_PART})
 sed -ie "s/<PARTUUID>/${PARTUUID}/" /boot/loader/entries/arch.conf
 # sudo
 sed -ie 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
