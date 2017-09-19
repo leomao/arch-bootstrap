@@ -8,7 +8,7 @@ My personal scripts for bootstrapping an archlinux system.
 3. Make sure the internet is available.
 4. run the following command:
 ```console
-$ curl https://raw.githubusercontent.com/leomao/arch-bootstrap/master/bootstrap.sh -o bootstrap.sh
+$ curl -L https://git.io/v5Aju | tar -xz --strip-component=1
 $ vim bootstrap.sh # set the variables to what you need.
 $ vim chroot.sh # set the variables to what you need.
 $ bash bootstrap.sh
