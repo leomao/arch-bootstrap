@@ -62,7 +62,14 @@ font_packages=(
 )
 app_packages=("firefox")
 
+fs_packages=(
+  "dosfstools"
+  "exfat-utils"
+  "ntfs-3g"
+)
+
 all_packages=(
+  "intel-ucode"
   ${basic_packages[@]}
   ${programming_packages[@]}
   ${python_packages[@]}
@@ -71,8 +78,16 @@ all_packages=(
   ${gui_packages[@]}
   ${font_packages[@]}
   ${app_packages[@]}
-  "intel-ucode"
+  ${fs_packages[@]}
 )
+
+MIRRORLIST=/etc/pacman.d/mirrorlist
+MIRRORALL=/etc/pacman.d/mirrorlist.all
+mv $MIRwORLIST $MIRRORALL
+grep ntou $MIRRORALL > $MIRRORLIST
+grep nctu $MIRRORALL >> $MIRRORLIST
+grep yzu $MIRRORALL >> $MIRRORLIST
+grep tku $MIRRORALL >> $MIRRORLIST
 
 pacstrap /mnt base base-devel ${all_packages[@]}
 genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab
