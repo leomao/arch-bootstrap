@@ -37,6 +37,7 @@ basic_packages=(
   "exa"
   "ripgrep"
   "the_silver_searcher"
+  "xsel"
 )
 
 programming_packages=(
@@ -83,7 +84,7 @@ all_packages=(
 
 MIRRORLIST=/etc/pacman.d/mirrorlist
 MIRRORALL=/etc/pacman.d/mirrorlist.all
-mv $MIRwORLIST $MIRRORALL
+mv $MIRRORLIST $MIRRORALL
 grep ntou $MIRRORALL > $MIRRORLIST
 grep nctu $MIRRORALL >> $MIRRORLIST
 grep yzu $MIRRORALL >> $MIRRORLIST
