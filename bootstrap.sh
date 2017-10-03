@@ -95,10 +95,12 @@ grep tku $MIRRORALL >> $MIRRORLIST
 pacstrap /mnt base base-devel ${all_packages[@]}
 genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab
 
-SCRIPT_DIR=/mnt/tmp/scripts
+SCRIPT_DIR=/mnt/scripts
 mkdir -p $SCRIPT_DIR
 mv chroot.sh pacaur.sh $SCRIPT_DIR
-arch-chroot /mnt bash /tmp/scripts/chroot.sh
+arch-chroot /mnt bash /scripts/chroot.sh
+
+rm -r /mnt/scripts
 
 umount -R /mnt
 reboot
