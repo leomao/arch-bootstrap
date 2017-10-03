@@ -49,8 +49,10 @@ programming_packages=(
 python_packages=(
   "ipython"
   "python-numpy" "python-scipy"
-  "python-matplotlib" "python-scikit-learn"
+  "python-scikit-learn"
   "python-pillow"
+  "python-matplotlib"
+  "tk" # matplotlib need it
 )
 
 nvidia_packages=("nvidia" "cuda" "cudnn" "cudnn6")
