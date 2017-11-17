@@ -29,14 +29,16 @@ basic_packages=(
   "rsync"
   "sshfs"
   "neovim"
-  "gvim"
   "python"
   "python-pip"
   "python-neovim"
   "htop"
-  "exa"
-  "ripgrep"
-  "the_silver_searcher"
+  "exa"      # ls   replacement
+  "ripgrep"  # grep replacement
+  "fd-rs"    # find replacement
+  # "the_silver_searcher"
+  #"vim"
+  "gvim"
   "xsel"
 )
 
@@ -48,14 +50,17 @@ programming_packages=(
 
 python_packages=(
   "ipython"
+  # if you want to use intel-mkl to compile following packages,
+  # then comment out following lines and use PKGBUILDs from
+  # https://github.com/leomao/arch-PKGBUILDs
   "python-numpy" "python-scipy"
-  "python-scikit-learn"
   "python-pillow"
+  "python-scikit-learn"
   "python-matplotlib"
   "tk" # matplotlib need it
 )
 
-nvidia_packages=("nvidia" "cuda" "cudnn" "cudnn6")
+nvidia_packages=("nvidia" "cuda" "cudnn")
 
 printer_packages=("cups" "hplip")
 gui_packages=("gnome" "gnome-tweak-tool" "system-config-printer")
@@ -63,7 +68,9 @@ font_packages=(
   "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji"
   "adobe-source-code-pro-fonts"
 )
-app_packages=("firefox")
+app_packages=(
+  "firefox"
+)
 
 fs_packages=(
   "dosfstools"
