@@ -51,6 +51,6 @@ sed -ie 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
 useradd -mG wheel,storage,power,video,audio $USER
 echo "$USER:$PASS" | chpasswd
 
-sudo -u $USER bash /tmp/scripts/pacaur.sh
+sudo -u $USER bash /scripts/pacaur.sh
 
 exit
