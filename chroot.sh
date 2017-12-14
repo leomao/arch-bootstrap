@@ -7,7 +7,7 @@ export TIMEZONE=Asia/Taipei
 export ROOT_PART=/dev/sda3
 
 # locale
-sed -i -e 's/^#\(en_US\|zh_TW\)\(\.UTF-8\)/\1\2/g' /etc/locale.gen
+sed -i 's/^#\(en_US\|zh_TW\)\(\.UTF-8\)/\1\2/g' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
@@ -18,13 +18,13 @@ systemctl enable systemd-timesyncd
 
 # hostname
 echo $HOSTNAME > /etc/hostname
-sed -ie "8i 127.0.1.1\t$HOSTNAME.localdomain\t$HOSTNAME" /etc/hosts
+sed -i "8i 127.0.1.1\t$HOSTNAME.localdomain\t$HOSTNAME" /etc/hosts
 
 # startup daemon
 systemctl enable fstrim.timer # only need if using SSD
 systemctl enable NetworkManager
 systemctl enable gdm
-sed -ie 's/#\(WaylandEnable\)/\1/' /etc/gdm/custom.conf # Wayland is not stable...
+sed -i 's/#\(WaylandEnable\)/\1/' /etc/gdm/custom.conf # Wayland is not stable...
 systemctl enable cups-browsed # for printer usage
 
 # boot loader
@@ -46,7 +46,7 @@ options root=PARTUUID=${PARTUUID} rw
 EOF
 
 # sudo
-sed -ie 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
+sed -i 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
 
 useradd -mG wheel,storage,power,video,audio $USER
 echo "$USER:$PASS" | chpasswd
