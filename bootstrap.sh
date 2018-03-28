@@ -35,7 +35,7 @@ basic_packages=(
   "htop"
   "exa"      # ls   replacement
   "ripgrep"  # grep replacement
-  "fd-rs"    # find replacement
+  "fd"    # find replacement
   # "the_silver_searcher"
   #"vim"
   "gvim"
