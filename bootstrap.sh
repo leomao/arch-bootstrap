@@ -50,8 +50,8 @@ programming_packages=(
 
 python_packages=(
   "ipython"
-  # if you want to use intel-mkl to compile following packages,
-  # then comment out following lines and use PKGBUILDs from
+  # if you want to compile following packages with intel-mkl,
+  # comment out following lines and use PKGBUILDs from
   # https://github.com/leomao/arch-PKGBUILDs
   "python-numpy" "python-scipy"
   "python-pillow"
@@ -94,10 +94,10 @@ all_packages=(
 MIRRORLIST=/etc/pacman.d/mirrorlist
 MIRRORALL=/etc/pacman.d/mirrorlist.all
 mv $MIRRORLIST $MIRRORALL
-grep ntou $MIRRORALL > $MIRRORLIST
 grep nctu $MIRRORALL >> $MIRRORLIST
 grep yzu $MIRRORALL >> $MIRRORLIST
 grep tku $MIRRORALL >> $MIRRORLIST
+grep ntou $MIRRORALL > $MIRRORLIST
 
 pacstrap /mnt base base-devel ${all_packages[@]}
 genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab

@@ -25,7 +25,7 @@ systemctl enable fstrim.timer # only need if using SSD
 systemctl enable NetworkManager
 systemctl enable gdm
 sed -i 's/#\(WaylandEnable\)/\1/' /etc/gdm/custom.conf # Wayland is not stable...
-systemctl enable cups-browsed # for printer usage
+systemctl enable cups-browsed # for printer
 
 # boot loader
 bootctl install
