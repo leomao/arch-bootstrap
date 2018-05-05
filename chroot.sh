@@ -51,6 +51,22 @@ sed -i 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
 useradd -mG wheel,storage,power,video,audio $USER
 echo "$USER:$PASS" | chpasswd
 
-sudo -u $USER bash /scripts/pacaur.sh
+
+# pacman local repo and aurutils
+install -d /var/cache/pacman/custom -o $USER
+cat > /etc/pacman.d/custom/ << EOF
+[options]
+CacheDir = /var/cache/pacman/pkg
+CacheDir = /var/cache/pacman/custom
+CleanMethod = KeepCurrent
+
+[custom]
+SigLevel = Optional TrustAll
+Server = file:///var/cache/pacman/custom
+EOF
+echo "Include = /etc/pacman.d/custom" >> /etc/pacman.conf
+sed -i 's/#Color/Color/' /etc/pacman.conf
+
+sudo -u $USER bash /scripts/aurutils.sh
 
 exit
