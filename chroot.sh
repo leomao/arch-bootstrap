@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/zsh -e
 
 export HOSTNAME=host
 export USER=server

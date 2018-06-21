@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/zsh -e
 
 ROOT_PART=/dev/sda3
 SWAP_PART=/dev/sda2
