@@ -22,6 +22,7 @@ if [[ -n ${EFI_PART} ]]; then
 fi
 
 basic_packages=(
+  "pacman-contrib"
   "zsh"
   "tmux"
   "git"
