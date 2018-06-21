@@ -105,7 +105,7 @@ genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab
 
 SCRIPT_DIR=/mnt/scripts
 mkdir -p $SCRIPT_DIR
-mv chroot.sh pacaur.sh $SCRIPT_DIR
+mv chroot.sh $SCRIPT_DIR
 arch-chroot /mnt bash /scripts/chroot.sh
 
 rm -r /mnt/scripts
