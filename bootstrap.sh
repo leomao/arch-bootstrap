@@ -36,7 +36,8 @@ basic_packages=(
   "htop"
   "exa"      # ls   replacement
   "ripgrep"  # grep replacement
-  "fd"    # find replacement
+  "fd"       # find replacement
+  "bat"      # cat with wings
   # "the_silver_searcher"
   #"vim"
   "gvim"
@@ -71,6 +72,7 @@ font_packages=(
 )
 app_packages=(
   "firefox"
+  "tilix"
 )
 
 fs_packages=(
