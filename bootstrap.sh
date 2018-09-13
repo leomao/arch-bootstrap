@@ -24,6 +24,7 @@ fi
 basic_packages=(
   "pacman-contrib"
   "zsh"
+  "zsh-completions"
   "tmux"
   "git"
   "openssh"
@@ -34,14 +35,20 @@ basic_packages=(
   "python-pip"
   "python-neovim"
   "htop"
-  "exa"      # ls   replacement
-  "ripgrep"  # grep replacement
-  "fd"       # find replacement
-  "bat"      # cat with wings
   # "the_silver_searcher"
   #"vim"
   "gvim"
   "xsel"
+)
+
+utils_packages=(
+  "fzf"
+  "diff-so-fancy"
+  "zsh-syntax-highlighting"
+  "exa"      # ls   replacement
+  "ripgrep"  # grep replacement
+  "fd"       # find replacement
+  "bat"      # cat with wings
 )
 
 programming_packages=(
@@ -84,6 +91,7 @@ fs_packages=(
 all_packages=(
   "intel-ucode"
   ${basic_packages[@]}
+  ${utils_packages[@]}
   ${programming_packages[@]}
   ${python_packages[@]}
   ${nvidia_packages[@]}
