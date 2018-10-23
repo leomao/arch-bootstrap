@@ -28,17 +28,24 @@ basic_packages=(
   "tmux"
   "git"
   "openssh"
-  "rsync"
   "sshfs"
-  "neovim"
+  #"sshpass"
+  "rsync"
   "python"
   "python-pip"
-  "python-neovim"
-  "htop"
-  # "the_silver_searcher"
-  #"vim"
+  # editor
   "gvim"
+  #"vim"
   "xsel"
+  "neovim"
+  "python-neovim"
+  # monitor
+  "htop"
+  "iotop"
+  "bmon"
+  # network related
+  "bind-tools"
+  "wget"
 )
 
 utils_packages=(
@@ -49,6 +56,11 @@ utils_packages=(
   "ripgrep"  # grep replacement
   "fd"       # find replacement
   "bat"      # cat with wings
+  "jq"       # json command line parser
+  "hq"       # html command line parser
+  "thefuck"
+  #"tree"
+  #"the_silver_searcher"
 )
 
 programming_packages=(
@@ -69,19 +81,27 @@ python_packages=(
   "tk" # matplotlib need it
 )
 
-nvidia_packages=("nvidia" "cuda" "cudnn")
+nvidia_packages=("nvidia" "cuda" "cudnn" "nccl")
 
-printer_packages=("cups" "hplip")
-gui_packages=("gnome" "gnome-tweak-tool" "system-config-printer")
 font_packages=(
   "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji"
   "adobe-source-code-pro-fonts"
 )
-app_packages=(
-  "firefox"
-  "tilix"
+printer_packages=("cups" "hplip")
+im_packages=(
+  "ibus-kkc"
+  "ibus-rime"
 )
-
+gui_packages=(
+  "gnome" "gnome-tweak-tool" "system-config-printer"
+  #"materia-gtk-theme"
+  "tilix" # a great terminal emulator
+  "firefox"
+  "chrome-gnome-shell"
+  "gimp"
+  #"zathura" "zathura-pdf-poppler" "zathura-djvu" "zathura-ps"
+  ${im_packages[@]}
+)
 fs_packages=(
   "dosfstools"
   "exfat-utils"
@@ -89,26 +109,24 @@ fs_packages=(
 )
 
 all_packages=(
-  "intel-ucode"
   ${basic_packages[@]}
   ${utils_packages[@]}
   ${programming_packages[@]}
   ${python_packages[@]}
   ${nvidia_packages[@]}
+  ${font_packages[@]}
   ${printer_packages[@]}
   ${gui_packages[@]}
-  ${font_packages[@]}
-  ${app_packages[@]}
   ${fs_packages[@]}
 )
 
 MIRRORLIST=/etc/pacman.d/mirrorlist
 MIRRORALL=/etc/pacman.d/mirrorlist.all
 mv $MIRRORLIST $MIRRORALL
+grep tku $MIRRORALL >> $MIRRORLIST
 grep nctu $MIRRORALL >> $MIRRORLIST
 grep yzu $MIRRORALL >> $MIRRORLIST
-grep tku $MIRRORALL >> $MIRRORLIST
-grep ntou $MIRRORALL > $MIRRORLIST
+grep ntou $MIRRORALL >> $MIRRORLIST
 
 pacstrap /mnt base base-devel ${all_packages[@]}
 genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab

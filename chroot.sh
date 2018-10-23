@@ -40,10 +40,15 @@ export PARTUUID=$(blkid -s PARTUUID -o value ${ROOT_PART})
 cat > /boot/loader/entries/arch.conf << EOF
 title	Arch Linux
 linux	/vmlinuz-linux
-initrd	/intel-ucode.img
 initrd	/initramfs-linux.img
 options root=PARTUUID=${PARTUUID} rw
 EOF
+# add intel-ucode if cpu is intel
+cpu_vendor=$(lscpu | grep Vendor | awk -F ': +' '{print $2}')
+if [[ $cpu_vendor == "GenuineIntel" ]]; then
+  pacman -S intel-ucode
+  sed -i -e '3i initrd	/intel-ucode.img' /boot/loader/entries/arch.conf
+fi
 
 # sudo
 sed -i 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
