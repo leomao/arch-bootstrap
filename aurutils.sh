@@ -5,7 +5,7 @@ REPODB=$REPODIR/custom.db.tar
 
 # pacman local repo and aurutils
 sudo install -d $REPODIR -o $USER
-cat | sudo tee -a /etc/pacman.d/custom/ << EOF
+cat | sudo tee -a /etc/pacman.d/custom << EOF
 [options]
 CacheDir = /var/cache/pacman/pkg
 CacheDir = /var/cache/pacman/custom
