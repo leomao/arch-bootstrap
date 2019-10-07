@@ -72,6 +72,8 @@ basic_packages=(
 )
 
 shell_packages=(
+  # NOTE: because chroot.sh is written for zsh... please install it.
+  # if you don't like it, you need to modify chroot.sh by yourself.
   "zsh"
   "zsh-completions"
   "tmux"
@@ -119,12 +121,17 @@ python_packages=(
 )
 
 nvidia_packages=(
-  "nvidia" # use nvidia-dkms if not using the default linux kernel
+  # NOTE: Please read https://wiki.archlinux.org/index.php/NVIDIA
+  "nvidia"
+  #"nvidia-lts"
   #"nvidia-dkms"
   "cuda" "cudnn" "nccl"
 )
 
-printer_packages=("cups" "hplip")
+printer_packages=(
+  "cups"
+  "hplip" # for hp printer
+)
 
 # following are what I usually install on a desktop/laptop
 gui_packages=(
@@ -154,7 +161,7 @@ all_packages=(
   ${programming_packages[@]}
   ${python_packages[@]}
   #${nvidia_packages[@]}
-  #${printer_packages[@]}
+  ${printer_packages[@]}
   ${gui_packages[@]}
   ${font_packages[@]}
 )

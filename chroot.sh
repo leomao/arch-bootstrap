@@ -41,15 +41,14 @@ if [[ $cpu_vendor == "GenuineIntel" ]]; then
 fi
 
 # assume root partition is /dev/sdxY
-# NOTE: if you are not using the default kernel, you need to change 
-# linux and initrd
 export PARTUUID=$(blkid -s PARTUUID -o value ${ROOT_PART})
-local default_kernel
-for k in linux linux-zen linux-hardened; do
+# iterate over possible kernels in the official repo
+for k in linux linux-lts linux-zen linux-hardened; do
   if pacman -Q $k; then
     name=${k//linux/arch}
     title="Arch Linux"
     if [[ "$k" =~ "^linux-(.*)" ]]; then
+      # so... use BASH_REMATCH instead of match if using bash
       title="$title (${match[1]})"
     fi
     cat > /boot/loader/entries/$name.conf <<- EOF

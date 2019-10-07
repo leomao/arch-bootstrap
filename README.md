@@ -3,8 +3,8 @@
 My personal scripts for bootstrapping an archlinux system.  
 
 NOTE: Sometimes I just updated the script without testing it,
-please check it by yourself and understanding the installation process
-before using it.
+please check it by yourself and make sure that you fully understand
+the installation process before using it.
 
 # Usage
 1. Boot a computer with arch live image.
