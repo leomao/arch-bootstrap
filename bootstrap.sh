@@ -176,7 +176,7 @@ pacstrap /mnt base base-devel ${all_packages[@]}
 SCRIPT_DIR=/mnt/scripts
 mkdir -p $SCRIPT_DIR
 mv chroot.sh $SCRIPT_DIR
-arch-chroot /mnt bash /scripts/chroot.sh $ROOT_PART
+arch-chroot /mnt zsh /scripts/chroot.sh $ROOT_PART
 
 rm -r /mnt/scripts
 
