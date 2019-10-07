@@ -1,5 +1,9 @@
 #! /bin/zsh -e
 
+# NOTE: you must connect to the internet and partition your disk
+# before running this script
+
+# NOTE: you must change the following lines...
 ROOT_PART=/dev/sda3
 SWAP_PART=/dev/sda2
 EFI_PART=/dev/sda1
@@ -21,46 +25,79 @@ if [[ -n ${EFI_PART} ]]; then
   mount ${EFI_PART} /mnt/boot
 fi
 
+# ensure the system clock is accurate
+timedatectl set-ntp true
+
+# NOTE: PLEASE EDITING THE FOLLOWING AND PICK PACKAGES YOU NEED ###
+
+kernel_packages=(
+  "linux"
+  #"linux-lts"
+  #"linux-zen"
+  #"linux-hardened"
+  "linux-firmware"
+  #"mkinitcpio"
+  #"dracut"  # may replace mkinitcpio in the future
+)
+
+fs_packages=(
+  "xfsprogs"
+  #"dosfstools"
+  #"exfat-utils"
+  #"ntfs-3g"
+  #"reiserfsprogs"
+  #"jfsutils"
+  #"nfs-utils"
+)
+
 basic_packages=(
+  "man-db"
+  "man-pages"
+  "usbutils"
+  "which"
   "pacman-contrib"
+  "python"
+  "python-pip"
+  #### editor ####
+  #"gvim"
+  #"vim"
+  "neovim"
+  "python-pynvim"
+  "xsel"
+  #### network related ####
+  "bind-tools"
+  "wget"
+  #"netctl"
+  #"inetutils"
+)
+
+shell_packages=(
   "zsh"
   "zsh-completions"
   "tmux"
   "git"
+  "rsync"
+  #### ssh ####
   "openssh"
   "sshfs"
   #"sshpass"
-  "rsync"
-  "python"
-  "python-pip"
-  # editor
-  "gvim"
-  #"vim"
-  "xsel"
-  "neovim"
-  "python-neovim"
-  # monitor
+  #### monitor ####
   "htop"
   "iotop"
   "bmon"
-  # network related
-  "bind-tools"
-  "wget"
-)
-
-utils_packages=(
+  #### utils ####
   "fzf"
   "diff-so-fancy"
   "zsh-syntax-highlighting"
   "exa"      # ls   replacement
   "ripgrep"  # grep replacement
+  #"the_silver_searcher"
   "fd"       # find replacement
   "bat"      # cat with wings
   "jq"       # json command line parser
   "hq"       # html command line parser
   "thefuck"
-  #"tree"
-  #"the_silver_searcher"
+  "tree"
 )
 
 programming_packages=(
@@ -81,60 +118,65 @@ python_packages=(
   "tk" # matplotlib need it
 )
 
-nvidia_packages=("nvidia" "cuda" "cudnn" "nccl")
+nvidia_packages=(
+  "nvidia" # use nvidia-dkms if not using the default linux kernel
+  #"nvidia-dkms"
+  "cuda" "cudnn" "nccl"
+)
 
-font_packages=(
-  "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji"
-  "adobe-source-code-pro-fonts"
-)
 printer_packages=("cups" "hplip")
-im_packages=(
-  "ibus-kkc"
-  "ibus-rime"
-)
+
+# following are what I usually install on a desktop/laptop
 gui_packages=(
   "gnome" "gnome-tweak-tool" "system-config-printer"
-  #"materia-gtk-theme"
+  "materia-gtk-theme"
   "tilix" # a great terminal emulator
   "firefox"
   "chrome-gnome-shell"
   "gimp"
-  #"zathura" "zathura-pdf-poppler" "zathura-djvu" "zathura-ps"
-  ${im_packages[@]}
+  "zathura" "zathura-pdf-poppler" "zathura-djvu" "zathura-ps"
+  #### input methods ####
+  "ibus-kkc"
+  "ibus-rime"
 )
-fs_packages=(
-  "dosfstools"
-  "exfat-utils"
-  "ntfs-3g"
+font_packages=(
+  "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji"
+  "adobe-source-code-pro-fonts"
 )
 
+# NOTE: please check the following
+
 all_packages=(
+  ${kernel_packages[@]}
+  ${fs_packages[@]}
   ${basic_packages[@]}
-  ${utils_packages[@]}
+  ${shell_packages[@]}
   ${programming_packages[@]}
   ${python_packages[@]}
-  ${nvidia_packages[@]}
-  ${font_packages[@]}
-  ${printer_packages[@]}
+  #${nvidia_packages[@]}
+  #${printer_packages[@]}
   ${gui_packages[@]}
-  ${fs_packages[@]}
+  ${font_packages[@]}
 )
 
 MIRRORLIST=/etc/pacman.d/mirrorlist
 MIRRORALL=/etc/pacman.d/mirrorlist.all
 mv $MIRRORLIST $MIRRORALL
+# NOTE: these are mirrors in Taiwan, you may want to change these lines
 grep tku $MIRRORALL >> $MIRRORLIST
 grep nctu $MIRRORALL >> $MIRRORLIST
 grep yzu $MIRRORALL >> $MIRRORLIST
 grep ntou $MIRRORALL >> $MIRRORLIST
 
+# NOTE: if you don't want to install base-devel, then you can remove it.
 pacstrap /mnt base base-devel ${all_packages[@]}
-genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab
+# NOTE: using relatime or noatime depends on what fs you use...
+#genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab
 
 SCRIPT_DIR=/mnt/scripts
 mkdir -p $SCRIPT_DIR
 mv chroot.sh $SCRIPT_DIR
-arch-chroot /mnt bash /scripts/chroot.sh
+arch-chroot /mnt bash /scripts/chroot.sh $ROOT_PART
 
 rm -r /mnt/scripts
 

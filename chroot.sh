@@ -1,10 +1,13 @@
 #! /bin/zsh -e
 
+# NOTE: you *will* want change these lines...
 export HOSTNAME=host
 export USER=server
 export PASS=password
 export TIMEZONE=Asia/Taipei
-export ROOT_PART=/dev/sda3
+
+# variable from bootstrap.sh
+export ROOT_PART=$1
 
 # locale
 sed -i 's/^#\(en_US\|zh_TW\)\(\.UTF-8\)/\1\2/g' /etc/locale.gen
@@ -22,33 +25,58 @@ sed -i "8i 127.0.1.1\t$HOSTNAME.localdomain\t$HOSTNAME" /etc/hosts
 
 # startup daemon
 systemctl enable fstrim.timer # only need if using SSD
+systemctl enable cups-browsed # for printer
+# NOTE: if you don't want to use gnome, the following lines are useless...
 systemctl enable NetworkManager
 systemctl enable gdm
-sed -i 's/#\(WaylandEnable\)/\1/' /etc/gdm/custom.conf # Wayland is not stable...
-systemctl enable cups-browsed # for printer
+sed -i 's/#\(WaylandEnable\)/\1/' /etc/gdm/custom.conf # disable wayland
 
 # boot loader
 bootctl install
-cat > /boot/loader/loader.conf << EOF
-default	arch
-timeout	3
-editor	0
-EOF
 
-# assume root partition is /dev/sdxY
-export PARTUUID=$(blkid -s PARTUUID -o value ${ROOT_PART})
-cat > /boot/loader/entries/arch.conf << EOF
-title	Arch Linux
-linux	/vmlinuz-linux
-initrd	/initramfs-linux.img
-options root=PARTUUID=${PARTUUID} rw
-EOF
-# add intel-ucode if cpu is intel
+# install intel-ucode if cpu is intel
 cpu_vendor=$(lscpu | grep Vendor | awk -F ': +' '{print $2}')
 if [[ $cpu_vendor == "GenuineIntel" ]]; then
   pacman -S intel-ucode
-  sed -i -e '3i initrd	/intel-ucode.img' /boot/loader/entries/arch.conf
 fi
+
+# assume root partition is /dev/sdxY
+# NOTE: if you are not using the default kernel, you need to change 
+# linux and initrd
+export PARTUUID=$(blkid -s PARTUUID -o value ${ROOT_PART})
+local default_kernel
+for k in linux linux-zen linux-hardened; do
+  if pacman -Q $k; then
+    name=${k//linux/arch}
+    title="Arch Linux"
+    if [[ "$k" =~ "^linux-(.*)" ]]; then
+      title="$title (${match[1]})"
+    fi
+    cat > /boot/loader/entries/$name.conf <<- EOF
+      title	${title}
+      linux	/vmlinuz-${k}
+      initrd	/initramfs-${k}.img
+      options root=PARTUUID=${PARTUUID} rw
+    EOF
+    if [[ $cpu_vendor == "GenuineIntel" ]]; then
+      sed -i -e '3i initrd	/intel-ucode.img' /boot/loader/entries/$name.conf
+    fi
+    if [[ -z $default_kernel ]]; then
+      default_kernel=$name
+    fi
+  fi
+done
+
+if [[ -z $default_kernel ]]; then
+  echo "You don't have any kernel installed!?"
+  exit 1
+fi
+
+cat > /boot/loader/loader.conf << EOF
+default	${default_kernel}
+timeout	3
+editor	0
+EOF
 
 # sudo
 sed -i 's/# \(%wheel ALL=(ALL) ALL\)/\1/' /etc/sudoers
