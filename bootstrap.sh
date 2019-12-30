@@ -100,6 +100,8 @@ shell_packages=(
   "hq"       # html command line parser
   "thefuck"
   "tree"
+
+  "chezmoi"  # manage dotfiles
 )
 
 programming_packages=(
