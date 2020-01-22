@@ -1,4 +1,5 @@
 #! /bin/zsh -e
+# vim:noet:
 
 # NOTE: you *will* want change these lines...
 export HOSTNAME=host
@@ -37,38 +38,39 @@ bootctl install
 # install intel-ucode if cpu is intel
 cpu_vendor=$(lscpu | grep Vendor | awk -F ': +' '{print $2}')
 if [[ $cpu_vendor == "GenuineIntel" ]]; then
-  pacman -S intel-ucode
+	pacman -S intel-ucode
 fi
 
 # assume root partition is /dev/sdxY
 export PARTUUID=$(blkid -s PARTUUID -o value ${ROOT_PART})
 # iterate over possible kernels in the official repo
 for k in linux linux-lts linux-zen linux-hardened; do
-  if pacman -Q $k; then
-    name=${k//linux/arch}
-    title="Arch Linux"
-    if [[ "$k" =~ "^linux-(.*)" ]]; then
-      # so... use BASH_REMATCH instead of match if using bash
-      title="$title (${match[1]})"
-    fi
-    cat > /boot/loader/entries/$name.conf <<- EOF
-      title	${title}
-      linux	/vmlinuz-${k}
-      initrd	/initramfs-${k}.img
-      options root=PARTUUID=${PARTUUID} rw
-    EOF
-    if [[ $cpu_vendor == "GenuineIntel" ]]; then
-      sed -i -e '3i initrd	/intel-ucode.img' /boot/loader/entries/$name.conf
-    fi
-    if [[ -z $default_kernel ]]; then
-      default_kernel=$name
-    fi
-  fi
+	if pacman -Q $k; then
+		name=${k//linux/arch}
+		title="Arch Linux"
+		if [[ "$k" =~ "^linux-(.*)" ]]; then
+			# so... use BASH_REMATCH instead of match if using bash
+			title="$title (${match[1]})"
+		fi
+		conf_path="/boot/loader/entries/$name.conf"
+		cat > $conf_path <<- EOF
+			title	${title}
+			linux	/vmlinuz-${k}
+			initrd	/initramfs-${k}.img
+			options	root=PARTUUID=${PARTUUID} rw
+		EOF
+		if [[ $cpu_vendor == "GenuineIntel" ]]; then
+			sed -i -e '3i initrd	/intel-ucode.img' $conf_path
+		fi
+		if [[ -z $default_kernel ]]; then
+			default_kernel=$name
+		fi
+	fi
 done
 
 if [[ -z $default_kernel ]]; then
-  echo "You don't have any kernel installed!?"
-  exit 1
+	echo "You don't have any kernel installed!?"
+	exit 1
 fi
 
 cat > /boot/loader/loader.conf << EOF

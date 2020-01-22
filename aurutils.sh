@@ -1,4 +1,5 @@
 #! /bin/zsh
+# vim:noet:
 
 REPODIR=/var/cache/pacman/custom
 REPODB=$REPODIR/custom.db.tar

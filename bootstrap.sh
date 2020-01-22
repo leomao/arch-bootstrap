@@ -1,4 +1,5 @@
 #! /bin/zsh -e
+# vim:noet:
 
 # NOTE: you must connect to the internet and partition your disk
 # before running this script
