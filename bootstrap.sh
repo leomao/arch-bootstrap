@@ -182,6 +182,7 @@ grep ntou $MIRRORALL >> $MIRRORLIST
 pacstrap /mnt base base-devel ${all_packages[@]}
 # NOTE: using relatime or noatime depends on what fs you use...
 #genfstab -U /mnt | sed -e 's/relatime/noatime/g' >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 
 SCRIPT_DIR=/mnt/scripts
 mkdir -p $SCRIPT_DIR
